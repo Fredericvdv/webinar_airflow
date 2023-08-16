@@ -10,7 +10,7 @@ You can simply click the button below to start the exercise environment within G
 
 [![Open in Gitpod](
     https://gitpod.io/button/open-in-gitpod.svg
-)](https://gitpod.io/#https://github.com/datamindedbe/academy_airflow)
+)](https://gitpod.io/#https://github.com/Fredericvdv/webinar_airflow)
 
 ### Airflow UI
 
