@@ -2,7 +2,7 @@
 
 ## Description
 
-This is the repository for the webinar about cross-DAG dependencies in Apache Airflow.
+This is the repository for the [webinar about cross-DAG dependencies in Apache Airflow](https://streamyard.com/watch/BUifcMp5zBsZ).
 
 ## Getting started
 
