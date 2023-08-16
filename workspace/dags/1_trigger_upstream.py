@@ -6,7 +6,7 @@ from airflow.operators.trigger_dagrun import TriggerDagRunOperator
 
 # upstream DAG
 with DAG(
-  dag_id="upstream_trigger_dag",
+  dag_id="1_upstream_trigger_dag",
   start_date=datetime(2023, 1, 1),
   catchup=False,
   schedule="@daily",
@@ -17,12 +17,12 @@ with DAG(
   )
   trigger_A = TriggerDagRunOperator(
     task_id="trigger_A",
-    trigger_dag_id="downstream_dag_A",
+    trigger_dag_id="1_downstream_dag_A",
     conf={"message":"Message to pass to downstream DAG A."},
   )
   trigger_B = TriggerDagRunOperator(
     task_id="trigger_B",
-    trigger_dag_id="downstream_dag_B",
+    trigger_dag_id="1_downstream_dag_B",
     conf={"message":"Message to pass to downstream DAG B."},
   )
   start_task >> trigger_A >> trigger_B
