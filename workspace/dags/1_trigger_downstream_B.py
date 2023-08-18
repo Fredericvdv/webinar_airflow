@@ -11,9 +11,9 @@ def print_message(**kwargs):
 # downstream DAG B
 with DAG(
     dag_id="1_downstream_dag_B",
+    schedule="@daily",
     start_date=datetime(2023, 1, 1),
     catchup=False,
-    schedule="@daily",
 ) as dag:
     downstream_task_B = PythonOperator(
         task_id="downstream_task_B",
