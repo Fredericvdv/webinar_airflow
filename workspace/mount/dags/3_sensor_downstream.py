@@ -33,4 +33,4 @@ with DAG(
         execution_delta= timedelta(minutes=1)
     )
     
-    start_task >> [sensor_A >> sensor_B]
+    start_task >> sensor_A >> sensor_B
