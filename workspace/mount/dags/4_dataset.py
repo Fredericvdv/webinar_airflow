@@ -16,7 +16,7 @@ with DAG(
 ) as dag:
     start_task = BashOperator(
         task_id="start_task",
-        bash_command="echo 'Start task'",
+        bash_command="echo 'Modify dataset_1.txt'",
         outlets=[dataset1],
     )
 
@@ -29,7 +29,7 @@ with DAG(
 ) as dag:
     start_task = BashOperator(
         task_id="start_task",
-        bash_command="echo 'Start task'",
+        bash_command="echo 'Modify dataset_2.txt'",
         outlets=[dataset2],
     )
 
