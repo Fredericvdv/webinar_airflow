@@ -1,13 +1,12 @@
 from datetime import datetime
+
 from airflow import DAG
 from airflow.operators.bash_operator import BashOperator
 from airflow.sensors.external_task_marker import ExternalTaskMarker
 
-
-# DAG for upstream_dag_B
 with DAG(
     dag_id="2_sensor_upstream_B",
-    schedule="@daily",
+    schedule='* * * * *',
     start_date=datetime(2023, 1, 1),
     catchup=False,
 ) as dag:
