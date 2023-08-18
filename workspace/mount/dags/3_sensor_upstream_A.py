@@ -5,8 +5,8 @@ from airflow.operators.bash_operator import BashOperator
 from airflow.sensors.external_task import ExternalTaskMarker
 
 with DAG(
-    dag_id="2_sensor_upstream_A",
-    schedule='*/2 * * * *',
+    dag_id="3_sensor_upstream_A",
+    schedule='*/3 * * * *',
     start_date=datetime(2023, 1, 1),
     catchup=False,
 ) as dag:
