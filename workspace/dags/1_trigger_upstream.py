@@ -6,7 +6,7 @@ from airflow.operators.trigger_dagrun import TriggerDagRunOperator
 
 # upstream DAG
 with DAG(
-  dag_id="1_upstream_trigger_dag",
+  dag_id="1_trigger_upstream",
   schedule="@daily",
   start_date=datetime(2023, 1, 1),
   catchup=False,

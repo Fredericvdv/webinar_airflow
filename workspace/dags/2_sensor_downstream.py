@@ -6,7 +6,7 @@ from airflow.sensors.external_task import ExternalTaskSensor
 
 # downstream DAG
 with DAG(
-    "downstream_sensor_dag",
+    dag_id="2_sensor_downstream",
     schedule="@daily",
     start_date=datetime(2023, 1, 1),
     catchup=False,
