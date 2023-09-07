@@ -69,7 +69,7 @@ with DAG(
         task_id="sensor_A",
         external_dag_id="2_sensor_upstream_dag_A",
         external_task_id="end_task_A_marker",
-        timeout=60,                 # Time (in seconds) before the task times out and fails
+        timeout=120,                 # Time (in seconds) before the task times out and fails
         allowed_states=["success"],
     )
 
@@ -77,8 +77,8 @@ with DAG(
         task_id="sensor_B",
         external_dag_id="2_sensor_upstream_dag_B",
         external_task_id="end_task_B_marker",
-        poke_interval=5,
-        timeout=20,                    
+        poke_interval=30,
+        timeout=120,                    
         allowed_states=["success"],
     )
     
