@@ -31,7 +31,7 @@ with DAG(
 
 # downstream DAG A
 with DAG(
-  dag_id="1_trigger_downstream_A",
+  dag_id="1_downstream_dag_A",
   schedule="@daily",
   start_date=datetime(2023, 1, 1),
   catchup=False,
@@ -50,7 +50,7 @@ def print_message(**kwargs):
     print(f"Upstream message: {message}")
 
 with DAG(
-    dag_id="1_trigger_downstream_B",
+    dag_id="1_downstream_dag_B",
     schedule="@daily",
     start_date=datetime(2023, 1, 1),
     catchup=False,
