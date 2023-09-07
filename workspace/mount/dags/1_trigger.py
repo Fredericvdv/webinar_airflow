@@ -7,7 +7,7 @@ from airflow.operators.python_operator import PythonOperator
 
 # ---------------------- UPSTREAM DAG ---------------------- #
 with DAG(
-  dag_id="upstream_dag",
+  dag_id="1_trigger_upstream_dag",
   schedule="@daily",
   start_date=datetime(2023, 1, 1),
   catchup=False,
@@ -21,13 +21,13 @@ with DAG(
 
   trigger_A = TriggerDagRunOperator(
     task_id="trigger_A",
-    trigger_dag_id="1_downstream_dag_A",
+    trigger_dag_id="1_trigger_downstream_dag_A",
     conf={"message":"Message to pass to downstream DAG A."},
   )
 
   trigger_B = TriggerDagRunOperator(
     task_id="trigger_B",
-    trigger_dag_id="1_downstream_dag_B",
+    trigger_dag_id="1_trigger_downstream_dag_B",
     conf={"message":"Message to pass to downstream DAG B."},
   )
 
@@ -36,7 +36,7 @@ with DAG(
 
 # ---------------------- DOWNSTREAM DAG A ---------------------- #
 with DAG(
-  dag_id="downstream_dag_A",
+  dag_id="1_trigger_downstream_dag_A",
   schedule=None,  # No need to schedule, it's triggered by upstream
   start_date=datetime(2023, 1, 1),
   catchup=False,
@@ -56,7 +56,7 @@ def print_message(**kwargs):
     print(f"Received from upstream: {message}")
 
 with DAG(
-    dag_id="downstream_dag_B",
+    dag_id="1_trigger_downstream_dag_B",
     schedule="@daily", # Also possible to schedule, but not necessary
     start_date=datetime(2023, 1, 1),
     catchup=False,

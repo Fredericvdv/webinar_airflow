@@ -9,7 +9,7 @@ START_DATE = datetime(2023, 1, 1)
 
 # ---------------------- UPSTREAM DAG A ---------------------- #
 with DAG(
-    dag_id="upstream_dag_A",
+    dag_id="2_sensor_upstream_dag_A",
     schedule='* * * * *',       # Runs every minute
     start_date=START_DATE,
     catchup=False,
@@ -22,7 +22,7 @@ with DAG(
     
     end_task_A_marker = ExternalTaskMarker(
         task_id="end_task_A_marker",
-        external_dag_id="downstream_dag",
+        external_dag_id="2_sensor_downstream_dag",
         external_task_id="sensor_A",
     )
     
@@ -31,7 +31,7 @@ with DAG(
 
 # ---------------------- UPSTREAM DAG B ---------------------- #
 with DAG(
-    dag_id="upstream_dag_B",
+    dag_id="2_sensor_upstream_dag_B",
     # schedule='*/2 * * * *',     # Runs every 2 minutes
     schedule='* * * * *',
     start_date=START_DATE,
@@ -45,7 +45,7 @@ with DAG(
     
     end_task_B_marker = ExternalTaskMarker(
         task_id="end_task_B_marker",
-        external_dag_id="downstream_dag",
+        external_dag_id="2_sensor_downstream_dag",
         external_task_id="sensor_B",
     )
     
@@ -54,7 +54,7 @@ with DAG(
 
 # ---------------------- DOWNSTREAM DAG ---------------------- #
 with DAG(
-    dag_id="downstream_dag",
+    dag_id="2_sensor_downstream_dag",
     schedule='* * * * *',
     start_date=START_DATE,
     catchup=False,

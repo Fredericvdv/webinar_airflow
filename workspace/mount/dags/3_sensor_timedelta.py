@@ -7,7 +7,7 @@ from airflow.sensors.external_task import ExternalTaskMarker
 
 # ---------------------- UPSTREAM DAG A ---------------------- #
 with DAG(
-    dag_id="upstream_dag_A",
+    dag_id="3_sensor_upstream_dag_A",
     schedule='*/3 * * * *',     # Runs every 3 minutes, starting at 0 minutes
     start_date=datetime(2023, 1, 1),
     catchup=False,
@@ -20,7 +20,7 @@ with DAG(
     
     end_task_A_marker = ExternalTaskMarker(
         task_id="end_task_A_marker",
-        external_dag_id="2_sensor_downstream",
+        external_dag_id="3_sensor_downstream_dag",
         external_task_id="sensor_A",
     )
     
@@ -28,7 +28,7 @@ with DAG(
 
 # ---------------------- UPSTREAM DAG B ---------------------- #
 with DAG(
-    dag_id="upstream_dag_B",
+    dag_id="3_sensor_upstream_dag_B",
     schedule='1-59/3 * * * *',   # Runs every 3 minutes, starting at 1 minute
     # schedule='* * * * *',
     start_date=datetime(2023, 1, 1),
@@ -42,7 +42,7 @@ with DAG(
     
     end_task_B_marker = ExternalTaskMarker(
         task_id="end_task_B_marker",
-        external_dag_id="downstream_sensor_dag",
+        external_dag_id="3_sensor_downstream_dag",
         external_task_id="sensor_B",
     )
     
@@ -51,7 +51,7 @@ with DAG(
 
 # ---------------------- DOWNSTREAM DAG ---------------------- #
 with DAG(
-    dag_id="downstream_dag",
+    dag_id="3_sensor_downstream_dag",
     schedule='2-59/3 * * * *',  # Runs every 3 minutes, starting at 2 minutes
     start_date=datetime(2023, 1, 1),
     catchup=False,
@@ -64,7 +64,7 @@ with DAG(
 
     sensor_A = ExternalTaskSensor(
         task_id="sensor_A",
-        external_dag_id="upstream_dag_A",
+        external_dag_id="3_sensor_upstream_dag_A",
         external_task_id="end_task_A_marker",
         timeout=30,                 # Time (in seconds) before the task times out and fails
         allowed_states=["success"],
@@ -73,7 +73,7 @@ with DAG(
 
     sensor_B = ExternalTaskSensor(
         task_id="sensor_B",
-        external_dag_id="upstream_dag_B",
+        external_dag_id="3_sensor_upstream_dag_B",
         external_task_id="end_task_B_marker",
         timeout=30,                 
         allowed_states=["success"],
