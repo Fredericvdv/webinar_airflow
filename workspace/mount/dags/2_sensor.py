@@ -79,7 +79,6 @@ with DAG(
         external_task_id="end_task_B_marker",
         timeout=30,                 
         allowed_states=["success"],
-        # execution_delta= timedelta(minutes=1)
     )
     
     start_task >> [sensor_A, sensor_B]
