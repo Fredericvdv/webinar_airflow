@@ -77,7 +77,8 @@ with DAG(
         task_id="sensor_B",
         external_dag_id="2_sensor_upstream_dag_B",
         external_task_id="end_task_B_marker",
-        timeout=30,                 
+        poke_interval=5,
+        timeout=20,                    
         allowed_states=["success"],
     )
     
