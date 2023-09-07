@@ -5,16 +5,18 @@ from airflow.operators.bash import BashOperator
 from airflow.operators.trigger_dagrun import TriggerDagRunOperator
 from airflow.operators.python_operator import PythonOperator
 
-# upstream DAG
+# ---------------------- UPSTREAM DAG ---------------------- #
 with DAG(
   dag_id="upstream_dag",
   schedule="@daily",
   start_date=datetime(2023, 1, 1),
   catchup=False,
+  description="Upstream DAG that triggers downstream DAGs A and B",
 ) as dag:
+  
   start_task = BashOperator(
     task_id="start_task",
-    bash_command="echo 'Start task'",
+    bash_command="echo 'Starting the upstream tasks!'",
   )
 
   trigger_A = TriggerDagRunOperator(
@@ -32,13 +34,14 @@ with DAG(
   start_task >> trigger_A >> trigger_B
 
 
-# downstream DAG A
+# ---------------------- DOWNSTREAM DAG A ---------------------- #
 with DAG(
   dag_id="downstream_dag_A",
-  schedule="@daily",
+  schedule=None,  # No need to schedule, it's triggered by upstream
   start_date=datetime(2023, 1, 1),
   catchup=False,
 ) as dag:
+  
   downstream_task = BashOperator(
     task_id="downstream_task_A",
     bash_command='echo "Upstream message: $message"',
@@ -46,7 +49,7 @@ with DAG(
   )
 
 
-# downstream DAG B
+# ---------------------- DOWNSTREAM DAG B ---------------------- #
 def print_message(**kwargs):
     # Extract the 'message' passed from the upstream DAG
     message = kwargs['dag_run'].conf.get('message')
@@ -54,10 +57,11 @@ def print_message(**kwargs):
 
 with DAG(
     dag_id="downstream_dag_B",
-    schedule="@daily",
+    schedule="@daily", # Also possible to schedule, but not necessary
     start_date=datetime(2023, 1, 1),
     catchup=False,
 ) as dag:
+    
     downstream_task_B = PythonOperator(
         task_id="downstream_task_B",
         python_callable=print_message,
