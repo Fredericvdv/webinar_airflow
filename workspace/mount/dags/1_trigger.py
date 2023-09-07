@@ -53,7 +53,7 @@ with DAG(
 def print_message(**kwargs):
     # Extract the 'message' passed from the upstream DAG
     message = kwargs['dag_run'].conf.get('message')
-    print(f"Upstream message: {message}")
+    print(f"Received from upstream: {message}")
 
 with DAG(
     dag_id="downstream_dag_B",

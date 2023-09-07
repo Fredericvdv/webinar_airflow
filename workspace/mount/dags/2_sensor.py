@@ -5,11 +5,13 @@ from airflow.operators.bash import BashOperator
 from airflow.sensors.external_task import ExternalTaskSensor
 from airflow.sensors.external_task import ExternalTaskMarker
 
-# upstream_dag_A
+START_DATE = datetime(2023, 1, 1)
+
+# ---------------------- UPSTREAM DAG A ---------------------- #
 with DAG(
-    dag_id="2_sensor_upstream_A",
-    schedule='* * * * *',
-    start_date=datetime(2023, 1, 1),
+    dag_id="upstream_dag_A",
+    schedule='* * * * *',       # Runs every minute
+    start_date=START_DATE,
     catchup=False,
 ) as dag:
     
@@ -20,19 +22,19 @@ with DAG(
     
     end_task_A_marker = ExternalTaskMarker(
         task_id="end_task_A_marker",
-        external_dag_id="2_sensor_downstream",
+        external_dag_id="downstream_dag",
         external_task_id="sensor_A",
     )
     
     start_task_A >> end_task_A_marker
 
 
-# upstream_dag_B
+# ---------------------- UPSTREAM DAG B ---------------------- #
 with DAG(
-    dag_id="2_sensor_upstream_B",
-    schedule='*/2 * * * *',
-    # schedule='* * * * *',
-    start_date=datetime(2023, 1, 1),
+    dag_id="upstream_dag_B",
+    # schedule='*/2 * * * *',     # Runs every 2 minutes
+    schedule='* * * * *',
+    start_date=START_DATE,
     catchup=False,
 ) as dag:
     
@@ -43,18 +45,18 @@ with DAG(
     
     end_task_B_marker = ExternalTaskMarker(
         task_id="end_task_B_marker",
-        external_dag_id="downstream_sensor_dag",
+        external_dag_id="downstream_dag",
         external_task_id="sensor_B",
     )
     
     start_task_B >> end_task_B_marker
 
 
-# downstream_sensor_dag
+# ---------------------- DOWNSTREAM DAG ---------------------- #
 with DAG(
-    dag_id="2_sensor_downstream",
+    dag_id="downstream_dag",
     schedule='* * * * *',
-    start_date=datetime(2023, 1, 1),
+    start_date=START_DATE,
     catchup=False,
 ) as dag:
     
@@ -75,9 +77,9 @@ with DAG(
         task_id="sensor_B",
         external_dag_id="2_sensor_upstream_B",
         external_task_id="end_task_B_marker",
-        timeout=30,                 # in secondes
+        timeout=30,                 
         allowed_states=["success"],
-        execution_delta= timedelta(minutes=1)
+        # execution_delta= timedelta(minutes=1)
     )
     
     start_task >> [sensor_A, sensor_B]

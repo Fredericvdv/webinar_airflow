@@ -5,10 +5,10 @@ from airflow.operators.bash import BashOperator
 from airflow.sensors.external_task import ExternalTaskSensor
 from airflow.sensors.external_task import ExternalTaskMarker
 
-# upstream dag A
+# ---------------------- UPSTREAM DAG A ---------------------- #
 with DAG(
-    dag_id="3_sensor_upstream_A",
-    schedule='*/3 * * * *',
+    dag_id="upstream_dag_A",
+    schedule='*/3 * * * *',     # Runs every 3 minutes, starting at 0 minutes
     start_date=datetime(2023, 1, 1),
     catchup=False,
 ) as dag:
@@ -26,10 +26,10 @@ with DAG(
     
     start_task_A >> end_task_A_marker
 
-# upstream dag B
+# ---------------------- UPSTREAM DAG B ---------------------- #
 with DAG(
-    dag_id="3_sensor_upstream_B",
-    schedule='1-59/3 * * * *',
+    dag_id="upstream_dag_B",
+    schedule='1-59/3 * * * *',   # Runs every 3 minutes, starting at 1 minute
     # schedule='* * * * *',
     start_date=datetime(2023, 1, 1),
     catchup=False,
@@ -49,10 +49,10 @@ with DAG(
     start_task_B >> end_task_B_marker
 
 
-# downstream dag
+# ---------------------- DOWNSTREAM DAG ---------------------- #
 with DAG(
-    dag_id="3_sensor_downstream",
-    schedule='2-59/3 * * * *',
+    dag_id="downstream_dag",
+    schedule='2-59/3 * * * *',  # Runs every 3 minutes, starting at 2 minutes
     start_date=datetime(2023, 1, 1),
     catchup=False,
 ) as dag:
@@ -64,7 +64,7 @@ with DAG(
 
     sensor_A = ExternalTaskSensor(
         task_id="sensor_A",
-        external_dag_id="3_sensor_upstream_A",
+        external_dag_id="upstream_dag_A",
         external_task_id="end_task_A_marker",
         timeout=30,                 # Time (in seconds) before the task times out and fails
         allowed_states=["success"],
@@ -73,9 +73,9 @@ with DAG(
 
     sensor_B = ExternalTaskSensor(
         task_id="sensor_B",
-        external_dag_id="3_sensor_upstream_B",
+        external_dag_id="upstream_dag_B",
         external_task_id="end_task_B_marker",
-        timeout=30,                 # in secondes
+        timeout=30,                 
         allowed_states=["success"],
         execution_delta= timedelta(minutes=1)
     )
